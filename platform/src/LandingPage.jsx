@@ -46,7 +46,7 @@ export default function LandingPage() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/dashboard" className="text-sm/6 font-semibold text-gray-900">
+            <a href="/signUp" className="text-sm/6 font-semibold text-gray-900">
               Empezar <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
