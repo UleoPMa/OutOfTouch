@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../css/Chatbot.css';
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +15,7 @@ const Chatbot = () => {
   const inputRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  const API_KEY = process.env.REACT_APP_GEMINI_API_KEY || "AIzaSyDUp1l7xzq-_Goz2XpUmW_HIwUR4LUFOQk";
+  const apiKey = import.meta.env.VITE_API_KEY;
   const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
   const IMAGE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${API_KEY}`;
   useEffect(() => {
@@ -66,15 +67,31 @@ const Chatbot = () => {
         "Content-Type": "application/json"
       };
       
-      const systemPrompt = "Eres un asistente experto en finanzas personales. Proporciona mensajes acerca de ese tema, no muy largos, charla un poco con el y si te pide una respuesta concisa adelante.";
-      // Determine which API endpoint to use based on whether an image is present
+      const systemPrompt = `Eres un analista ambiental especializado en calidad del aire. Analiza datos de PM2.5, CO2, temperatura y humedad. 
+      Proporciona respuestas cortas (1-2 párrafos máximo) basadas en los datos proporcionados. Si el usuario sube un archivo de datos:
+      
+      1. Identifica patrones clave (picos, promedios, valores extremos)
+      2. Relaciona los parámetros entre sí (ej: "Cuando la humedad sube, el PM2.5 tiende a...")
+      3. Da recomendaciones prácticas basadas en los datos
+      4. Usa lenguaje técnico pero accesible
+      
+      Ejemplo de respuestas esperadas:
+      "Los niveles de PM2.5 están dentro del rango seguro (promedio 10 µg/m³). Noto que aumentan ligeramente cuando la temperatura supera los 20°C."
+      "El CO2 está en 719ppm - buen nivel para interiores. Sugiero ventilación cuando supere 800ppm."
+      
+      Evita:
+      - Listas con viñetas o asteriscos
+      - Textos demasiado largos
+      - Generalidades no basadas en los datos
+      - Formato markdown o especial`;
+            // Determine which API endpoint to use based on whether an image is present
       if (imageFile) {
         // Para imágenes seguimos usando la API de Gemini Pro Vision
         const data = {
           contents: [{
             role: "user",
             parts: [
-              { text: systemPrompt + " " + (inputText || "Analiza esta imagen financiera") },
+              { text: systemPrompt + " " + (inputText || "Analiza esta imagen") },
               { 
                 inlineData: { 
                   mimeType: imageFile.file.type, 
