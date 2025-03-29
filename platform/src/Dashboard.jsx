@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import Chatbot from './components/Chatbot'
 
 ChartJS.register(
   CategoryScale,
@@ -214,6 +215,8 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+
+      <Chatbot />
     </div>
   )
 }
